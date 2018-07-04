@@ -5,8 +5,8 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="MyBatis Web Template Generator">
+    <meta name="author" content="achimid">
 
     <title>MyBatis Web Template Generator</title>
 
@@ -53,50 +53,70 @@
 
                 <div class="col-12 js-options">
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optHeader" checked>
+                    <label class="custom-control-label" for="optHeader">Header</label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optNamespace" checked>
+                    <label class="custom-control-label" for="optNamespace">Namespace</label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optAlias" checked>
+                    <label class="custom-control-label" for="optAlias">Alias</label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optResultMap" checked>
+                    <label class="custom-control-label" for="optResultMap">ResultMap</label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optSqlWhere" checked>
+                    <label class="custom-control-label" for="optSqlWhere">SqlWhere</label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optInsert" checked>
+                    <label class="custom-control-label" for="optInsert">Insert</label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optUpdate" checked>
+                    <label class="custom-control-label" for="optUpdate">Update</label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optListaPorExemplo" checked>
+                    <label class="custom-control-label" for="optListaPorExemplo">ListaPorExemplo</label>
                   </div>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="opt1" checked>
-                    <label class="custom-control-label" for="opt1">Opt1</label>
+                    <input type="checkbox" class="custom-control-input" id="optListaTodos" checked>
+                    <label class="custom-control-label" for="optListaTodos">ListaTodos</label>
                   </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="optContaPorExemplo" checked>
+                    <label class="custom-control-label" for="optContaPorExemplo">ContaPorExemplo</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="optContaTodos" checked>
+                    <label class="custom-control-label" for="optContaTodos">ContaTodos</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="optPegaPorId" checked>
+                    <label class="custom-control-label" for="optPegaPorId">PegaPorId</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="optApagaPorId" checked>
+                    <label class="custom-control-label" for="optApagaPorId">ApagaPorId</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="optFooter" checked>
+                    <label class="custom-control-label" for="optFooter">Footer</label>
+                  </div>
+
                 </div>
                 <div class="col-12">
-                  <button type="submit" class="btn btn-block btn-lg btn-primary mg-b-10 ld-ext-center running">
+                  <button id="btnGenerate" class="btn btn-block btn-lg btn-primary mg-b-10 ld-ext-center running">
                     Generate
-                    <!--<div class="ld ld-ring ld-spin"></div>-->
                   </button>
                 </div>
-                <div class="col-12">
-                  <textarea type="xmlTemplate" class="form-control form-control-lg" placeholder="Xml Template..."></textarea>
+                <div class="col-12 js-xmlTemplate d-none">
+                  <textarea id="xmlTemplate" class="form-control form-control-lg big-textarea" placeholder="Xml Template..."></textarea>
                 </div>
               </div>
             </form>
@@ -105,57 +125,10 @@
       </div>
     </header>
 
-
-    <!-- Footer -->
-    <footer class="footer bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
-            <ul class="list-inline mb-2">
-              <li class="list-inline-item">
-                <a href="#">About</a>
-              </li>
-              <li class="list-inline-item">&sdot;</li>
-              <li class="list-inline-item">
-                <a href="#">Contact</a>
-              </li>
-              <li class="list-inline-item">&sdot;</li>
-              <li class="list-inline-item">
-                <a href="#">Terms of Use</a>
-              </li>
-              <li class="list-inline-item">&sdot;</li>
-              <li class="list-inline-item">
-                <a href="#">Privacy Policy</a>
-              </li>
-            </ul>
-            <p class="text-muted small mb-4 mb-lg-0">&copy; Your Website 2018. All Rights Reserved.</p>
-          </div>
-          <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
-            <ul class="list-inline mb-0">
-              <li class="list-inline-item mr-3">
-                <a href="#">
-                  <i class="fa fa-facebook fa-2x fa-fw"></i>
-                </a>
-              </li>
-              <li class="list-inline-item mr-3">
-                <a href="#">
-                  <i class="fa fa-twitter fa-2x fa-fw"></i>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <i class="fa fa-instagram fa-2x fa-fw"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
-
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/index.js"></script>
 
   </body>
 

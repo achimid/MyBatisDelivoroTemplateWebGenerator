@@ -40,8 +40,8 @@ header.masthead h1 {
 
 @media (min-width: 768px) {
   header.masthead {
-    padding-top: 10rem;
-    padding-bottom: 10rem;
+    padding-top: 11rem;
+    padding-bottom: 11rem;
   }
   header.masthead h1 {
     font-size: 3rem;
@@ -59,7 +59,7 @@ header.masthead h1 {
 
 @media (min-width: 768px) {
   .showcase .showcase-text {
-    padding: 7rem;
+    padding: 5rem;
   }
 }
 
@@ -132,4 +132,9 @@ footer.footer {
 
 .mg-b-10{
   margin-bottom: 10px;
+}
+
+.big-textarea{
+  min-height: 400px;
+  font-size: 0.60rem;
 }
