@@ -11,7 +11,9 @@ function addLoader(){
 }
 
 function removeLoader(){
-  $("#btnGenerate").html('Generate');
+  setTimeout(function(){
+    $("#btnGenerate").html('Generate');
+  },500);
 }
 
 function getParams(){
@@ -48,8 +50,14 @@ function ajaxGenerateRequest(){
 }
 
 function setResponse(response){
-    debugger;
     removeLoader();
     $('.js-xmlTemplate').removeClass('d-none');
     $('#xmlTemplate').val(response);
+    scrollToTextArea();
+}
+
+function scrollToTextArea(){
+    $('html,body').animate({
+          scrollTop: $('#xmlTemplate').offset().top
+    }, 1000);
 }

@@ -24,6 +24,11 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
 
     public DelivoroCRUDBuilder(String clazzPackage, String clazzNameFull, String clazzAlias){
         this();
+
+        if(clazzPackage == null     || clazzPackage.isEmpty())  clazzPackage     = "br.com.model.template";
+        if(clazzNameFull == null    || clazzNameFull.isEmpty()) clazzNameFull    = "OrderItem.java";
+        if(clazzAlias == null       || clazzAlias.isEmpty())    clazzAlias       = "order";
+
         clazzNameFull = StringUtil.getInstance().removeJavaExtension(clazzNameFull);
         this.clazzNameFull = clazzNameFull;
         this.clazzNamespace = "manut." + clazzNameFull;

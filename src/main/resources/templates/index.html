@@ -35,20 +35,20 @@
             <h1 class="mb-5">Generate XML CRUD template from MyBatis. </h1>
           </div>
           <div class="col-md-10 mx-auto">
-            <form>
+            <form action="#">
               <div class="form-row">
 
                 <div class="col-md-4 form-group">
                   <label for="clazzPackage">Class Package</label>
-                  <input type="text" class="form-control" id="clazzPackage" placeholder="Ex: br.com.model.template">
+                  <input type="text" class="form-control" id="clazzPackage" placeholder="Ex: br.com.model.template" required="true">
                 </div>
                 <div class="col-md-4 form-group">
                   <label for="clazzNameFull">Class Full Name</label>
-                  <input type="text" class="form-control" id="clazzNameFull" placeholder="Ex: OrderItem.java">
+                  <input type="text" class="form-control" id="clazzNameFull" placeholder="Ex: OrderItem.java" required="true">
                 </div>
                 <div class="col-md-4 form-group">
                   <label for="clazzPackage">Alias</label>
-                  <input type="text" class="form-control" id="clazzAlias" placeholder="Ex: order">
+                  <input type="text" class="form-control" id="clazzAlias" placeholder="Ex: order" required="true">
                 </div>
 
                 <div class="col-12 js-options">
@@ -111,7 +111,7 @@
 
                 </div>
                 <div class="col-12">
-                  <button id="btnGenerate" class="btn btn-block btn-lg btn-primary mg-b-10 ld-ext-center running">
+                  <button type="submit" id="btnGenerate" class="btn btn-block btn-lg btn-primary mg-b-10 ld-ext-center running">
                     Generate
                   </button>
                 </div>

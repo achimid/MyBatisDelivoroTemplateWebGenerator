@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 public class BuilderFactory {
 
     public BuilderInterface getBuilderDelivoroCRUD(String clazzPackage, String clazzNameFull, String clazzAlias){
-
         return new DelivoroCRUDBuilder(clazzPackage, clazzNameFull, clazzAlias);
-        //throw new RuntimeException("Builder undefined");
     }
 
 
