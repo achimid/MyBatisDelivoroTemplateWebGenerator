@@ -10,8 +10,8 @@ public class DelivoroCRUDTemplate {
     protected static final String rClazzTable = "#clazzTable#";
 
     private final String QUEBRA_LINHA = "\n";
-    private final String TABULACAO = "  ";
-    private final String TABULACAO_TAB = "\t\t";
+    private final String TABULACAO = "\t";
+    private final String TABULACAO_TAB = "\t\t\t";
 
     protected StringBuilder tHeader =
         new StringBuilder()
@@ -134,6 +134,7 @@ public class DelivoroCRUDTemplate {
                     .append(QUEBRA_LINHA)
             .append(TABULACAO_TAB)
                 .append("#idExemplo#")
+                .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append(TABULACAO)
                     .append(")")
