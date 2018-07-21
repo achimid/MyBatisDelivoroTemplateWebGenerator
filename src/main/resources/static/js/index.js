@@ -3,6 +3,8 @@ $(function(){
     e.preventDefault();
     ajaxGenerateRequest();
   });
+
+  $(".js-button-add-field").on('click', addNewField);
 });
 
 function addLoader(){
@@ -34,7 +36,8 @@ function getParams(){
         'generateContaTodos' :      $('#optContaTodos').is(':checked'),
         'generatePegaPorId' :       $('#optPegaPorId').is(':checked'),
         'generateApagaPorId' :      $('#optApagaPorId').is(':checked'),
-        'generateFooter' :          $('#optFooter').is(':checked')
+        'generateFooter' :          $('#optFooter').is(':checked'),
+        'fields' :  $( ".js-field" ).map(function() {return this.value;}).get()
     }
 }
 
@@ -60,4 +63,17 @@ function scrollToTextArea(){
     $('html,body').animate({
           scrollTop: $('#xmlTemplate').offset().top
     }, 1000);
+}
+
+function addNewField(){
+    var nField =
+    `<div class="input-group">
+         <input type="text" class="form-control js-field" placeholder="New Field Ex: idOrder">
+         <span class="input-group-btn">
+           <button type="button" class="btn btn-secondary js-button-remove-field" onclick="$(this).parent().parent().remove();">
+             <i class="fa fa-trash-o" aria-hidden="true"></i>
+           </button>
+         </span>
+     </div>`;
+    $('.js-fields-list').append(nField);
 }

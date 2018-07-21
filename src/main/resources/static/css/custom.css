@@ -20,8 +20,10 @@ header.masthead {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  /*padding-top: 5rem;
+  padding-bottom: 5rem;*/
+  height: 100%;
+    width: 100%;
 }
 
 header.masthead .overlay {
@@ -106,8 +108,10 @@ header.masthead h1 {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  padding-top: 7rem;
-  padding-bottom: 7rem;
+  /*padding-top: 7rem;
+  padding-bottom: 7rem;*/
+  height: 100%;
+    width: 100%;
 }
 
 .call-to-action .overlay {
