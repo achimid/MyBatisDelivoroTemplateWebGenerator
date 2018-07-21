@@ -1,34 +1,16 @@
 package br.com.achimid.web.generator.DTO;
 
 import br.com.achimid.web.generator.model.DelivoroCRUDConfig;
+import lombok.Data;
 
+import java.util.List;
+
+@Data
 public class DelivoroCRUDParams extends DelivoroCRUDConfig {
 
     private String clazzNameFull;
     private String clazzPackage;
     private String clazzAlias;
+    private List<String> fields;
 
-    public String getClazzNameFull() {
-        return clazzNameFull;
-    }
-
-    public void setClazzNameFull(String clazzNameFull) {
-        this.clazzNameFull = clazzNameFull;
-    }
-
-    public String getClazzPackage() {
-        return clazzPackage;
-    }
-
-    public void setClazzPackage(String clazzPackage) {
-        this.clazzPackage = clazzPackage;
-    }
-
-    public String getClazzAlias() {
-        return clazzAlias;
-    }
-
-    public void setClazzAlias(String clazzAlias) {
-        this.clazzAlias = clazzAlias;
-    }
 }
