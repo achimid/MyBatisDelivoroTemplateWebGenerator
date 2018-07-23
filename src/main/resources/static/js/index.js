@@ -37,8 +37,17 @@ function getParams(){
         'generatePegaPorId' :       $('#optPegaPorId').is(':checked'),
         'generateApagaPorId' :      $('#optApagaPorId').is(':checked'),
         'generateFooter' :          $('#optFooter').is(':checked'),
-        'fields' :  $( ".js-field" ).map(function() {return this.value;}).get()
+        'fields' :                  getFieldsTypes()
     }
+}
+
+function getFieldsTypes(){
+    return $( ".js-field" ).map(function() {
+        obj = {};
+        obj[$(this).closest('.input-group').find('.js-field').val().toString()] =
+        $(this).closest('.input-group').find('.js-field-type').val();
+        return obj;
+    }).get();
 }
 
 function ajaxGenerateRequest(){
@@ -67,13 +76,26 @@ function scrollToTextArea(){
 
 function addNewField(){
     var nField =
-    `<div class="input-group">
-         <input type="text" class="form-control js-field" placeholder="New Field Ex: idOrder">
-         <span class="input-group-btn">
-           <button type="button" class="btn btn-secondary js-button-remove-field" onclick="$(this).parent().parent().remove();">
-             <i class="fa fa-trash-o" aria-hidden="true"></i>
-           </button>
-         </span>
-     </div>`;
+    `
+        <div class="input-group">
+          <input class="form-control js-field" placeholder="Ex: idOrder" type="text">
+          <div class="input-group-append">
+            <select class="custom-select js-field-type" id="inputGroupSelect01">
+                <option value="String" selected>String</option>
+                <option value="Integer">Integer</option>
+                <option value="Boolean">Boolean</option>
+                <option value="Date">Date</option>
+                <option value="SmallInt">SmallInt</option>
+                <div role="separator" class="dropdown-divider"></div>
+            </select>
+          </div>
+          <div class="input-group-append">
+                <button type="button" class="btn btn-secondary js-button-remove-field" onclick="$(this).closest('.input-group').remove();">
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+          </div>
+        </div>
+    `;
+
     $('.js-fields-list').append(nField);
 }

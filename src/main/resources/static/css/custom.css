@@ -138,6 +138,10 @@ footer.footer {
   margin-bottom: 10px;
 }
 
+.mg-l-10{
+  margin-left: 10px;
+}
+
 .big-textarea{
   min-height: 400px;
   font-size: 0.80rem;
