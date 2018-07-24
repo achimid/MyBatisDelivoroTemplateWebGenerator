@@ -1,5 +1,9 @@
 package br.com.achimid.web.generator.model;
 
+import br.com.achimid.web.generator.util.StringUtil;
+
+import java.util.Map;
+
 public class DelivoroCRUDTemplate {
 
     protected static final String rClazzAlias = "#clazzAlias#";
@@ -8,6 +12,8 @@ public class DelivoroCRUDTemplate {
     protected static final String rClazzNameFull = "#clazzNameFull#";
     protected static final String rClazzNamespace = "#clazzNamespace#";
     protected static final String rClazzTable = "#clazzTable#";
+
+    protected static final String lResultProperties = "#resultProperties#";
 
     private final String QUEBRA_LINHA = "\n";
     private final String TABULACAO = "\t";
@@ -51,16 +57,30 @@ public class DelivoroCRUDTemplate {
                 .append(rClazzAlias)
                 .append("\">")
                 .append(QUEBRA_LINHA)
-            .append(TABULACAO)
-                .append(TABULACAO_TAB)
-                    .append("<result property=\"idExemplo\"")
-                    .append(TABULACAO_TAB).append(TABULACAO_TAB)
-                    .append("column=\"id_exemplo\"/>")
-                    .append(QUEBRA_LINHA)
+            .append(lResultProperties)
             .append(TABULACAO)
                 .append("</resultMap>")
                 .append(QUEBRA_LINHA)
             .append(QUEBRA_LINHA);
+
+    protected StringBuilder getResultProperty(DelivoroCRUDConfig config){
+        StringBuilder sn = new StringBuilder();
+        if(!config.getFields().isEmpty()){
+            for(Map<String, String> m : config.getFields())
+            sn.append(TABULACAO_TAB)
+                .append(TABULACAO)
+                    .append("<result property=\"")
+                    .append(m.keySet().iterator().next())
+                    .append("\"")
+                    .append(TABULACAO_TAB)
+                        .append(TABULACAO_TAB)
+                            .append("column=\"")
+                            .append(StringUtil.getInstance().toCamelCase(m.keySet().iterator().next()))
+                            .append("\"/>")
+                    .append(QUEBRA_LINHA);
+        }
+        return sn;
+    }
 
     protected StringBuilder tSqlWhere =
         new StringBuilder()

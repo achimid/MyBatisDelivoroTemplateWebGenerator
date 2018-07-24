@@ -66,7 +66,8 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
         if(config.isGenerateResultMap())
             return tResultMap.toString()
                     .replaceAll(rClazzAlias, clazzAlias)
-                    .replaceAll(rClazzName, clazzName);
+                    .replaceAll(rClazzName, clazzName)
+                    .replaceAll(lResultProperties, getResultProperty(config).toString());
         return null;
     }
 

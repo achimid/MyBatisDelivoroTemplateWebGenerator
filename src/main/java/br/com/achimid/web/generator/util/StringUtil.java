@@ -31,9 +31,13 @@ public class StringUtil {
     }
 
     public String getClazzTableFromClazzNameFull(String clazzNameFull){
-        StringBuilder strTable = new StringBuilder();
-        for(String s : splitCamelCase(clazzNameFull)) strTable.append(strTable.length() == 0 ? s.toLowerCase() : "_".concat(s.toLowerCase()));
-        return strTable.toString();
+        return toCamelCase(clazzNameFull);
+    }
+
+    public String toCamelCase(String str){
+        StringBuilder output = new StringBuilder();
+        for(String s : splitCamelCase(str)) output.append(output.length() == 0 ? s.toLowerCase() : "_".concat(s.toLowerCase()));
+        return output.toString();
     }
 
     public String removeJavaExtension(String clazzFullName){

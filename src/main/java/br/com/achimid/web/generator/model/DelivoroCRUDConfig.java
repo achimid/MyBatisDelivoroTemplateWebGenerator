@@ -3,6 +3,10 @@ package br.com.achimid.web.generator.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @Data
 @EqualsAndHashCode(callSuper=false)
 public class DelivoroCRUDConfig {
@@ -21,6 +25,7 @@ public class DelivoroCRUDConfig {
     private boolean generatePegaPorId;
     private boolean generateApagaPorId;
     private boolean generateFooter;
+    private List<Map<String, String>> fields;
 
     public DelivoroCRUDConfig(){
         generateHeader = true;
@@ -37,6 +42,7 @@ public class DelivoroCRUDConfig {
         generatePegaPorId = true;
         generateApagaPorId = true;
         generateFooter = true;
+        fields = new ArrayList<>();
     }
 
 }
