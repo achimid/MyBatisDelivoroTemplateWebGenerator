@@ -67,13 +67,14 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
             return tResultMap.toString()
                     .replaceAll(rClazzAlias, clazzAlias)
                     .replaceAll(rClazzName, clazzName)
-                    .replaceAll(lResultProperties, getResultProperty(config).toString());
+                    .replaceAll(lResultMapProperties, getResultMapProperty(config).toString());
         return null;
     }
 
     public String getSqlWhere(){
         if(config.isGenerateSqlWhere())
-            return tSqlWhere.toString();
+            return tSqlWhere.toString()
+                    .replaceAll(lSqlWhereProperties, getSqlWhereProperty(config).toString());;
         return null;
     }
 

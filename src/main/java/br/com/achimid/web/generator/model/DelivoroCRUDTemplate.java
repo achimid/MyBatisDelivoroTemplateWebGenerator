@@ -2,6 +2,7 @@ package br.com.achimid.web.generator.model;
 
 import br.com.achimid.web.generator.util.StringUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DelivoroCRUDTemplate {
@@ -13,7 +14,8 @@ public class DelivoroCRUDTemplate {
     protected static final String rClazzNamespace = "#clazzNamespace#";
     protected static final String rClazzTable = "#clazzTable#";
 
-    protected static final String lResultProperties = "#resultProperties#";
+    protected static final String lResultMapProperties = "#resultMapProperties#";
+    protected static final String lSqlWhereProperties = "#sqlWhereProperties#";
 
     private final String QUEBRA_LINHA = "\n";
     private final String TABULACAO = "\t";
@@ -57,13 +59,13 @@ public class DelivoroCRUDTemplate {
                 .append(rClazzAlias)
                 .append("\">")
                 .append(QUEBRA_LINHA)
-            .append(lResultProperties)
+            .append(lResultMapProperties)
             .append(TABULACAO)
                 .append("</resultMap>")
                 .append(QUEBRA_LINHA)
             .append(QUEBRA_LINHA);
 
-    protected StringBuilder getResultProperty(DelivoroCRUDConfig config){
+    protected StringBuilder getResultMapProperty(DelivoroCRUDConfig config){
         StringBuilder sn = new StringBuilder();
         if(!config.getFields().isEmpty()){
             for(Map<String, String> m : config.getFields())
@@ -73,7 +75,6 @@ public class DelivoroCRUDTemplate {
                     .append(m.keySet().iterator().next())
                     .append("\"")
                     .append(TABULACAO_TAB)
-                        .append(TABULACAO_TAB)
                             .append("column=\"")
                             .append(StringUtil.getInstance().toCamelCase(m.keySet().iterator().next()))
                             .append("\"/>")
@@ -87,34 +88,53 @@ public class DelivoroCRUDTemplate {
             .append(TABULACAO)
                 .append("<sql id=\"sqlWhere\">")
                 .append(QUEBRA_LINHA)
+            .append(lSqlWhereProperties)
             .append(TABULACAO)
-                .append(TABULACAO)
-                    .append("<dynamic prepend=\"WHERE\">")
-                    .append(QUEBRA_LINHA)
+                .append("</sql>")
+                .append(QUEBRA_LINHA)
+            .append(QUEBRA_LINHA);
+
+
+    protected StringBuilder getSqlWhereProperty(DelivoroCRUDConfig config) {
+        StringBuilder sn = new StringBuilder();
+
+        this.addExampleIfEmptyFiels(config, sn);
+
+        sn.append(TABULACAO)
             .append(TABULACAO)
+                .append("<dynamic prepend=\"WHERE\">")
+                .append(QUEBRA_LINHA);
+
+        for(Map<String, String> m : config.getFields())
+            sn.append(TABULACAO)
                 .append(TABULACAO)
                     .append(TABULACAO)
-                        .append("<isNotEmpty property=\"idExemplo\" prepend=\"AND\">")
+                        .append("<isNotEmpty property=\"")
+                        .append(m.keySet().iterator().next())
+                        .append("\" prepend=\"AND\">")
                         .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append(TABULACAO)
                     .append(TABULACAO)
                         .append(TABULACAO)
-                            .append("id_exemplo = #idExemplo#")
+                            .append(StringUtil.getInstance().toCamelCase(m.keySet().iterator().next()))
+                            .append("=#")
+                            .append(m.keySet().iterator().next())
+                            .append("#")
                             .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append(TABULACAO)
                     .append(TABULACAO)
                         .append("</isNotEmpty>")
-                        .append(QUEBRA_LINHA)
+                        .append(QUEBRA_LINHA);
+
+        sn.append(TABULACAO)
             .append(TABULACAO)
-                .append(TABULACAO)
-                    .append("</dynamic>")
-                    .append(QUEBRA_LINHA)
-            .append(TABULACAO)
-                .append("</sql>")
-                .append(QUEBRA_LINHA)
-            .append(QUEBRA_LINHA);
+                .append("</dynamic>")
+                .append(QUEBRA_LINHA);
+
+        return sn;
+    }
 
 
     protected StringBuilder tInsert =
@@ -163,7 +183,6 @@ public class DelivoroCRUDTemplate {
                 .append("</insert>")
                 .append(QUEBRA_LINHA)
             .append(QUEBRA_LINHA);
-
 
 
     protected StringBuilder tUpdate =
@@ -342,6 +361,15 @@ public class DelivoroCRUDTemplate {
 
     protected StringBuilder tFooter = new StringBuilder("</sqlMap>");
 
+
+
+    private void addExampleIfEmptyFiels(DelivoroCRUDConfig config, StringBuilder sn){
+        if (config.getFields().isEmpty()) {
+            Map<String, String> example = new HashMap<>();
+            example.put("idExemplo", "String");
+            config.getFields().add(example);
+        }
+    }
 
 
 }
