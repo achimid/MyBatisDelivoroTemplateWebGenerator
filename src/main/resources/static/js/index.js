@@ -5,6 +5,7 @@ $(function(){
   });
 
   $(".js-button-add-field").on('click', addNewField);
+  $(document).on('change', '.custom-select', validaPK);
 });
 
 function addLoader(){
@@ -99,4 +100,13 @@ function addNewField(){
     `;
 
     $('.js-fields-list').append(nField);
+    validaPK();
+}
+
+function validaPK(){
+    if($('.js-field-type').find('option:selected[value="PK"]').length > 0){
+        $('.js-field-type').find('option:not(:selected)[value="PK"]').hide();
+    }else{
+        $('.js-field-type').find('option[value="PK"]').show();
+    }
 }
