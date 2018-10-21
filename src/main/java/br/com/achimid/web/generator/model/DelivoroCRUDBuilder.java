@@ -198,8 +198,8 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
     protected String getPkPropertyValue(@NotNull DelivoroCRUDConfig config) {
         if(config.getFields() != null && !config.getFields().isEmpty()) {
             for (Map<String, String> m : config.getFields()) {
-                String textType = m.keySet().iterator().next();
-                if (isPrimaryKey(textType)) return textType;
+                String textType = m.values().iterator().next();
+                if (isPrimaryKey(textType)) return m.keySet().iterator().next();
             }
         }
 
