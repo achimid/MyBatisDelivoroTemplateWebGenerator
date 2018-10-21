@@ -86,6 +86,7 @@ function addNewField(){
                 <option value="Boolean">Boolean</option>
                 <option value="Date">Date</option>
                 <option value="SmallInt">SmallInt</option>
+                <option value="PK">PRIMARY KEY</option>
                 <div role="separator" class="dropdown-divider"></div>
             </select>
           </div>

@@ -2,6 +2,7 @@ package br.com.achimid.web.generator.model;
 
 import br.com.achimid.web.generator.util.StringUtil;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,13 @@ public class DelivoroCRUDTemplate {
 
     protected static final String lResultMapProperties = "#resultMapProperties#";
     protected static final String lSqlWhereProperties = "#sqlWhereProperties#";
+    protected static final String lInsertProperties = "#insertProperties#";
+    protected static final String lUpdateProperties = "#updateProperties#";
+
+    protected static final String pkColumn = "#pkColumn#";
+    protected static final String pkProperty = "#pkProperty#";
+
+
 
     private final String QUEBRA_LINHA = "\n";
     private final String TABULACAO = "\t";
@@ -68,17 +76,20 @@ public class DelivoroCRUDTemplate {
     protected StringBuilder getResultMapProperty(DelivoroCRUDConfig config){
         StringBuilder sn = new StringBuilder();
         if(!config.getFields().isEmpty()){
-            for(Map<String, String> m : config.getFields())
-            sn.append(TABULACAO_TAB)
-                .append(TABULACAO)
-                    .append("<result property=\"")
-                    .append(m.keySet().iterator().next())
-                    .append("\"")
-                    .append(TABULACAO_TAB)
+            for(Map<String, String> m : config.getFields()) {
+                String textType = m.values().iterator().next();
+                if (isPrimaryKey(textType)) continue;
+                    sn.append(TABULACAO_TAB)
+                        .append(TABULACAO)
+                            .append("<result property=\"")
+                            .append(m.keySet().iterator().next())
+                            .append("\"")
+                                .append(TABULACAO_TAB)
                             .append("column=\"")
                             .append(StringUtil.getInstance().toCamelCase(m.keySet().iterator().next()))
                             .append("\"/>")
-                    .append(QUEBRA_LINHA);
+                            .append(QUEBRA_LINHA);
+            }
         }
         return sn;
     }
@@ -105,7 +116,10 @@ public class DelivoroCRUDTemplate {
                 .append("<dynamic prepend=\"WHERE\">")
                 .append(QUEBRA_LINHA);
 
-        for(Map<String, String> m : config.getFields())
+        for(Map<String, String> m : config.getFields()) {
+            String textType = m.values().iterator().next();
+            if (isPrimaryKey(textType)) continue;
+
             sn.append(TABULACAO)
                 .append(TABULACAO)
                     .append(TABULACAO)
@@ -113,26 +127,25 @@ public class DelivoroCRUDTemplate {
                         .append(m.keySet().iterator().next())
                         .append("\" prepend=\"AND\">")
                         .append(QUEBRA_LINHA)
-            .append(TABULACAO)
-                .append(TABULACAO)
                     .append(TABULACAO)
                         .append(TABULACAO)
-                            .append(StringUtil.getInstance().toCamelCase(m.keySet().iterator().next()))
-                            .append("=#")
-                            .append(m.keySet().iterator().next())
-                            .append("#")
-                            .append(QUEBRA_LINHA)
-            .append(TABULACAO)
-                .append(TABULACAO)
+                            .append(TABULACAO)
+                                .append(TABULACAO)
+                                    .append(StringUtil.getInstance().toCamelCase(m.keySet().iterator().next()))
+                                    .append("=#")
+                                    .append(m.keySet().iterator().next())
+                                    .append("#")
+                                    .append(QUEBRA_LINHA)
                     .append(TABULACAO)
-                        .append("</isNotEmpty>")
-                        .append(QUEBRA_LINHA);
-
+                        .append(TABULACAO)
+                            .append(TABULACAO)
+                                .append("</isNotEmpty>")
+                                .append(QUEBRA_LINHA);
+        }
         sn.append(TABULACAO)
-            .append(TABULACAO)
-                .append("</dynamic>")
-                .append(QUEBRA_LINHA);
-
+                .append(TABULACAO)
+                    .append("</dynamic>")
+                    .append(QUEBRA_LINHA);
         return sn;
     }
 
@@ -148,42 +161,80 @@ public class DelivoroCRUDTemplate {
                 .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append(TABULACAO)
-                    .append("<selectKey keyProperty=\"idExemplo\" type=\"post\" resultClass=\"int\">")
+                    .append("<selectKey keyProperty=\"")
+                    .append(pkProperty)
+                    .append("\" type=\"post\" resultClass=\"int\">")
                     .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append(TABULACAO)
                     .append(TABULACAO)
-                        .append("SELECT last_insert_id() AS idExemplo")
+                        .append("SELECT last_insert_id() AS ")
+                        .append(pkProperty)
                         .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append(TABULACAO)
                     .append("</selectKey>")
                     .append(QUEBRA_LINHA)
-            .append(TABULACAO)
-                .append(TABULACAO)
-                    .append("INSERT INTO ")
-                    .append(rClazzTable)
-                    .append(" (")
-                    .append(QUEBRA_LINHA)
-            .append(TABULACAO_TAB)
-                .append("id_exemplo")
-                .append(QUEBRA_LINHA)
-            .append(TABULACAO)
-                .append(TABULACAO)
-                    .append(") VALUES (")
-                    .append(QUEBRA_LINHA)
-            .append(TABULACAO_TAB)
-                .append("#idExemplo#")
-                .append(QUEBRA_LINHA)
-            .append(TABULACAO)
-                .append(TABULACAO)
-                    .append(")")
-                    .append(QUEBRA_LINHA)
+            .append(lInsertProperties)
             .append(TABULACAO)
                 .append("</insert>")
                 .append(QUEBRA_LINHA)
             .append(QUEBRA_LINHA);
 
+    protected StringBuilder getInsertProperty(DelivoroCRUDConfig config){
+        StringBuilder sn = new StringBuilder();
+
+        this.addExampleIfEmptyFiels(config, sn);
+        int size = config.getFields().size() -1;
+        int i = 0;
+
+        sn.append(TABULACAO)
+            .append(TABULACAO)
+                .append("INSERT INTO ")
+                .append(rClazzTable)
+                .append(" (")
+                .append(QUEBRA_LINHA);
+
+        for(Map<String, String> m : config.getFields()) {
+            String textType = m.values().iterator().next();
+            if (isPrimaryKey(textType)) continue;
+
+            sn.append(TABULACAO_TAB)
+                .append(StringUtil.getInstance().toCamelCase(m.keySet().iterator().next()));
+
+            if(++i != size) sn.append(",");
+
+            sn.append(QUEBRA_LINHA);
+        }
+
+        sn.append(TABULACAO)
+            .append(TABULACAO)
+                .append(") VALUES (")
+                .append(QUEBRA_LINHA);
+
+        i = 0;
+
+        for(Map<String, String> m : config.getFields()){
+            String textType = m.values().iterator().next();
+            if (isPrimaryKey(textType)) continue;
+
+            sn.append(TABULACAO_TAB)
+                .append("#")
+                .append(m.keySet().iterator().next())
+                .append("#");
+
+            if(++i != size) sn.append(",");
+
+            sn.append(QUEBRA_LINHA);
+        }
+
+        sn.append(TABULACAO)
+            .append(TABULACAO)
+                .append(")")
+                .append(QUEBRA_LINHA);
+
+        return sn;
+    }
 
     protected StringBuilder tUpdate =
         new StringBuilder()
@@ -203,19 +254,45 @@ public class DelivoroCRUDTemplate {
                 .append(TABULACAO)
                     .append("SET")
                     .append(QUEBRA_LINHA)
-            .append(TABULACAO)
-                .append(TABULACAO_TAB)
-                    .append("exemplo_id_exemplo=#idExemplo#")
-                    .append(QUEBRA_LINHA)
+            .append(lUpdateProperties)
             .append(TABULACAO)
                 .append(TABULACAO)
-                    .append("WHERE id_exemplo = #idExemplo#")
+                    .append("WHERE ")
+                    .append(pkColumn)
+                    .append(" = #")
+                    .append(pkProperty)
+                    .append("#")
                     .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append("</update>")
                 .append(QUEBRA_LINHA)
             .append(QUEBRA_LINHA);
 
+    protected StringBuilder getUpdateProperty(DelivoroCRUDConfig config){
+        StringBuilder sn = new StringBuilder();
+
+        this.addExampleIfEmptyFiels(config, sn);
+        int size = config.getFields().size();
+        int i = 0;
+
+        for(Map<String, String> m : config.getFields()){
+            String textType = m.values().iterator().next();
+            if(isPrimaryKey(textType)) continue;
+
+            sn.append(TABULACAO)
+                .append(TABULACAO_TAB)
+                    .append(StringUtil.getInstance().toCamelCase(m.keySet().iterator().next()))
+                    .append("=#")
+                    .append(m.keySet().iterator().next())
+                    .append("#");
+
+            if(++i != size) sn.append(",");
+
+            sn.append(QUEBRA_LINHA);
+        }
+
+        return sn;
+    }
 
     protected StringBuilder tListaPorExemplo =
         new StringBuilder()
@@ -265,7 +342,12 @@ public class DelivoroCRUDTemplate {
                     .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append(TABULACAO)
-                    .append("WHERE id_exemplo = #idExemplo#")
+                    .append("WHERE ")
+                    .append(pkColumn)
+                    .append(" = #")
+                    .append(pkProperty)
+                    .append("#")
+                    .append(QUEBRA_LINHA)
                     .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append("</select>")
@@ -292,7 +374,12 @@ public class DelivoroCRUDTemplate {
                     .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append(TABULACAO)
-                    .append("WHERE id_exemplo = #idExemplo#")
+                    .append("WHERE ")
+                    .append(pkColumn)
+                    .append(" = #")
+                    .append(pkProperty)
+                    .append("#")
+                    .append(QUEBRA_LINHA)
                     .append(QUEBRA_LINHA)
             .append(TABULACAO)
                 .append("</delete>")
@@ -371,5 +458,9 @@ public class DelivoroCRUDTemplate {
         }
     }
 
+    protected boolean isPrimaryKey(String typeText){
+        if(typeText == null || typeText.isEmpty()) return false;
+        return typeText.equalsIgnoreCase("PK");
+    }
 
 }

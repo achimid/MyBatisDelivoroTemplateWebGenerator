@@ -4,7 +4,9 @@ import br.com.achimid.web.generator.util.BuilderInterface;
 import br.com.achimid.web.generator.util.StringUtil;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.Map;
 
 @Component
 public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements BuilderInterface{
@@ -15,6 +17,8 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
     private String clazzAlias;
     private String clazzNamespace;
     private String clazzTable;
+    private String fieldPkColumn;
+    private String fieldPkProperty;
 
     private DelivoroCRUDConfig config;
 
@@ -65,34 +69,44 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
     public String getResultMap(){
         if(config.isGenerateResultMap())
             return tResultMap.toString()
+                    .replaceAll(lResultMapProperties, getResultMapProperty(config).toString())
                     .replaceAll(rClazzAlias, clazzAlias)
                     .replaceAll(rClazzName, clazzName)
-                    .replaceAll(lResultMapProperties, getResultMapProperty(config).toString());
+                    .replaceAll(pkColumn, getPkColumnValue(config))
+                    .replaceAll(pkProperty, getPkPropertyValue(config));
         return null;
     }
 
     public String getSqlWhere(){
         if(config.isGenerateSqlWhere())
             return tSqlWhere.toString()
-                    .replaceAll(lSqlWhereProperties, getSqlWhereProperty(config).toString());;
+                    .replaceAll(lSqlWhereProperties, getSqlWhereProperty(config).toString())
+                    .replaceAll(pkColumn, getPkColumnValue(config))
+                    .replaceAll(pkProperty, getPkPropertyValue(config));
         return null;
     }
 
     public String getInsert(){
         if(config.isGenerateInsert())
             return tInsert.toString()
+                    .replaceAll(lInsertProperties, getInsertProperty(config).toString())
                     .replaceAll(rClazzAlias, clazzAlias)
                     .replaceAll(rClazzNameFull, clazzNameFull)
-                    .replaceAll(rClazzTable, clazzTable);
+                    .replaceAll(rClazzTable, clazzTable)
+                    .replaceAll(pkColumn, getPkColumnValue(config))
+                    .replaceAll(pkProperty, getPkPropertyValue(config));
         return null;
     }
 
     public String getUpdate(){
         if(config.isGenerateUpdate())
             return tUpdate.toString()
+                    .replaceAll(lUpdateProperties, getUpdateProperty(config).toString())
                     .replaceAll(rClazzAlias, clazzAlias)
                     .replaceAll(rClazzNameFull, clazzNameFull)
-                    .replaceAll(rClazzTable, clazzTable);
+                    .replaceAll(rClazzTable, clazzTable)
+                    .replaceAll(pkColumn, getPkColumnValue(config))
+                    .replaceAll(pkProperty, getPkPropertyValue(config));
         return null;
     }
 
@@ -101,7 +115,9 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
             return tApagaPorId.toString()
                     .replaceAll(rClazzAlias, clazzAlias)
                     .replaceAll(rClazzNameFull, clazzNameFull)
-                    .replaceAll(rClazzTable, clazzTable);
+                    .replaceAll(rClazzTable, clazzTable)
+                    .replaceAll(pkColumn, getPkColumnValue(config))
+                    .replaceAll(pkProperty, getPkPropertyValue(config));
         return null;
     }
     public String getPegaPorId(){
@@ -109,7 +125,9 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
             return tPegaPorId.toString()
                     .replaceAll(rClazzName, clazzName)
                     .replaceAll(rClazzNameFull, clazzNameFull)
-                    .replaceAll(rClazzTable, clazzTable);
+                    .replaceAll(rClazzTable, clazzTable)
+                    .replaceAll(pkColumn, getPkColumnValue(config))
+                    .replaceAll(pkProperty, getPkPropertyValue(config));
         return null;
     }
     public String getListaTodos(){
@@ -170,6 +188,26 @@ public class DelivoroCRUDBuilder extends DelivoroCRUDTemplate implements Builder
 
         return builder.toString();
     }
+
+
+
+    protected String getPkColumnValue(@NotNull DelivoroCRUDConfig config) {
+        return StringUtil.getInstance().toCamelCase(getPkPropertyValue(config));
+    }
+
+    protected String getPkPropertyValue(@NotNull DelivoroCRUDConfig config) {
+        if(config.getFields() != null && !config.getFields().isEmpty()) {
+            for (Map<String, String> m : config.getFields()) {
+                String textType = m.keySet().iterator().next();
+                if (isPrimaryKey(textType)) return textType;
+            }
+        }
+
+        return "idExemplo";
+    }
+
+
+
 
     public DelivoroCRUDConfig getConfig() {
         return config;
